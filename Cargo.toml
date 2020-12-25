@@ -1,30 +1,24 @@
 [package]
 name = "gitui"
-version = "0.11.0"
+version = "0.12.0"
 authors = ["Stephan Dilly <dilly.stephan@gmail.com>"]
 description = "blazing fast terminal-ui for git"
 edition = "2018"
-exclude = [".github/*",".vscode/*"]
+exclude = [".github/*", ".vscode/*"]
 homepage = "https://github.com/extrawurst/gitui"
 repository = "https://github.com/extrawurst/gitui"
 readme = "README.md"
 license = "MIT"
 categories = ["command-line-utilities"]
-keywords = [
-    "git",
-    "gui",
-    "cli",
-    "terminal",
-    "ui",
-]
+keywords = ["git", "gui", "cli", "terminal", "ui"]
 
 [dependencies]
 scopetime = { path = "./scopetime", version = "0.1" }
 asyncgit = { path = "./asyncgit", version = "0.11" }
-crossterm = { version = "0.18", features = [ "serde" ] }
+crossterm = { version = "0.18", features = ["serde"] }
 clap = { version = "2.33", default-features = false }
 tui = { version = "0.13", default-features = false, features = ['crossterm', 'serde'] }
-bytesize = { version = "1.0.1", default-features = false}
+bytesize = { version = "1.0.1", default-features = false }
 itertools = "0.9"
 rayon-core = "1.9"
 log = "0.4"
@@ -49,21 +43,23 @@ which = "4.0"
 pprof = { version = "0.3", features = ["flamegraph"], optional = true }
 
 [badges]
-maintenance = { status = "actively-developed" }
+maintenance = { status = "passively-maintained" }
 
 [features]
-default=[]
-timing=["scopetime/enabled"]
+default = ["macos-user-home-config"]
+timing = ["scopetime/enabled"]
+# If enabled, use `$XDG_CONFIG_HOME/gitui/key_config.ron" for config path on
+# macOS, like on Unix, instead of using `$HOME/Library/Application Support/`.
+macos-user-home-config = []
 
 [workspace]
-members=[
-    "asyncgit",
-    "scopetime",
-]
+members = ["asyncgit", "scopetime"]
 
 [profile.release]
 lto = true
-opt-level = 'z'  # Optimize for size.
+# Optimize for speed; we don't need to distribute binary locally so this is
+# fine!
+opt-level = 3
 codegen-units = 1
 
 # make debug build as fast as release 

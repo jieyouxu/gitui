@@ -48,7 +48,7 @@ use scopetime::scope_time;
 use simplelog::{Config, LevelFilter, WriteLogger};
 use spinner::Spinner;
 use std::{
-    env, fs,
+    cfg, env, fs,
     fs::File,
     io::{self, Write},
     panic,
@@ -240,8 +240,15 @@ fn get_app_cache_path() -> Result<PathBuf> {
 }
 
 fn get_app_config_path() -> Result<PathBuf> {
-    let mut path = dirs_next::config_dir()
-        .ok_or_else(|| anyhow!("failed to find os config dir."))?;
+    let mut path = if cfg!(all(
+        feature = "macos-user-home-config",
+        target_os = "macos"
+    )) {
+        PathBuf::from(env::var("XDG_CONFIG_HOME")?)
+    } else {
+        dirs_next::config_dir()
+            .ok_or_else(|| anyhow!("failed to find os config dir."))?
+    };
 
     path.push("gitui");
     fs::create_dir_all(&path)?;
