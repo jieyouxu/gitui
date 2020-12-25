@@ -251,7 +251,19 @@ fn get_app_config_path() -> Result<PathBuf> {
     };
 
     path.push("gitui");
+
+    log::trace!(
+        "opening or creating configuration path: {:#?}",
+        path
+    );
+
     fs::create_dir_all(&path)?;
+
+    log::trace!(
+        "successfully opened or created configuration path: {:#?}",
+        path
+    );
+
     Ok(path)
 }
 
